@@ -1,11 +1,9 @@
-import React from "react";
 import Image from "next/image";
 
 const HeroSection = () => {
   return (
     <section className="bg-[#f5f9ff] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
-        {/* Text Content */}
         <div className="lg:w-1/2 space-y-6">
           <h2 className="text-4xl md:text-5xl font-semibold text-gray-800 leading-tight">
             Access Timeless Orthodox Teachings with Ours
@@ -24,7 +22,6 @@ const HeroSection = () => {
             </button>
           </div>
 
-          {/* Learners Section */}
           <div className="flex items-center space-x-4 pt-6">
             <div className="flex -space-x-3">
               {[1, 2, 3, 4].map((item) => (
@@ -45,7 +42,6 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <Image
             src="/coursera-illustration.png"

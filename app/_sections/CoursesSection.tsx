@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+
 import featuredCourses from "@/app/_constants/FeaturedCoursesDemo";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";

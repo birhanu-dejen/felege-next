@@ -1,24 +1,20 @@
-// components/NewFooter.tsx
-
-
-import React from "react";
 import Link from "next/link";
 import { Mail, MapPin, Phone, Globe } from "lucide-react";
 import { FaFacebook, FaTelegram, FaYoutube } from "react-icons/fa";
-import Logo from "@/app/_components/_ui/Logo";
+
 import footerLinks from "@/app/_constants/FooterText";
 
 export default function NewFooter() {
   return (
     <footer className="bg-[#0B0F1A] text-gray-400 py-12 text-sm">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-10">
-        {/* Logo & Mission */}
         <div>
-          <Logo />
+          <h2 className="text-white font-semibold text-lg">
+            FELEGEHIWOT {/* <Logo /> latter replaced by orignal logo */}
+          </h2>
           <p className="text-gray-500 mt-2">Tradition meets technology.</p>
         </div>
 
-        {/* Dynamic Navigation Sections */}
         {footerLinks.map((section) => (
           <div key={section.title}>
             <h3 className="text-white font-semibold mb-3 text-sm">
@@ -36,7 +32,6 @@ export default function NewFooter() {
           </div>
         ))}
 
-        {/* Contact */}
         <div>
           <h3 className="text-white font-semibold mb-3 text-sm">Contact</h3>
           <div className="space-y-3">
@@ -56,11 +51,9 @@ export default function NewFooter() {
         </div>
       </div>
 
-      {/* Footer Bottom */}
       <div className="mt-12 space-y-6">
         <hr className="border-t border-gray-700" />
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-500 px-4">
-          {/* Social Icons */}
           <div className="flex gap-4">
             <a href="#" aria-label="Facebook" className="hover:text-white">
               <FaFacebook size={22} />
@@ -73,12 +66,10 @@ export default function NewFooter() {
             </a>
           </div>
 
-          {/* Copyright */}
           <p className="text-center">
             © {new Date().getFullYear()} FelegeHiwot. All rights reserved.
           </p>
 
-          {/* Language Selector */}
           <div className="flex items-center gap-2">
             <Globe size={20} className="text-gray-400" />
             <select className="bg-transparent text-sm text-gray-400 focus:outline-none">

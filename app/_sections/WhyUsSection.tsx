@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import benefits from "@/app/_constants/WhyUsText";
 
 const FelegeHiwotBenefits = () => {
