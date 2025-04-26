@@ -1,5 +1,5 @@
 import testimonialsDemo from "../_constants/TestimonialsDemo";
-//import Image from "next/image";
+
 const Testimonials = () => {
   return (
     <section className="py-12 bg-white text-gray-800">

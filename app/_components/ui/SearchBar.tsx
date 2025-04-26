@@ -1,12 +1,20 @@
 import { Search } from "lucide-react";
-import React from "react";
+import React, { ChangeEvent, FormEvent } from "react";
 
-export default function CourseSearchBar({ onSearch }) {
-  const [query, setQuery] = React.useState("");
+interface CourseSearchBarProps {
+  onSearch?: (query: string) => void;
+}
 
-  const handleSubmit = (e) => {
+const CourseSearchBar: React.FC<CourseSearchBarProps> = ({ onSearch }) => {
+  const [query, setQuery] = React.useState<string>("");
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSearch?.(query);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
   };
 
   return (
@@ -17,15 +25,17 @@ export default function CourseSearchBar({ onSearch }) {
           placeholder="What do you want to learn?"
           className="flex-grow px-5 py-3 text-sm focus:outline-none"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleChange}
         />
         <button
           type="submit"
-          className="bg-indigo-600 hover:bg-indigo-700  p-2 rounded-full mr-2 transition-colors cursor-pointer"
+          className="bg-indigo-600 hover:bg-indigo-700 p-2 rounded-full mr-2 transition-colors cursor-pointer"
         >
           <Search className="text-white" size={18} />
         </button>
       </div>
     </form>
   );
-}
+};
+
+export default CourseSearchBar;

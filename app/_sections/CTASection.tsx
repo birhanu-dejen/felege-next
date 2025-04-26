@@ -1,5 +1,3 @@
-import React from "react";
-
 const CallToAction = () => {
   return (
     <section className="bg-indigo-600 text-white py-16">

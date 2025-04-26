@@ -1,4 +1,3 @@
-// app/page.js or app/home.js
 import HeroSection from "@/app/_sections/HeroSection ";
 import CoursesSection from "@/app/_sections/CoursesSection";
 import TestimonialsSection from "@/app/_sections/TestimonialsSection";
