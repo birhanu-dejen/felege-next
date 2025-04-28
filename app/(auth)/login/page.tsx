@@ -3,29 +3,48 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaApple } from "react-icons/fa";
-import { loginSchema } from "@/app/lib/loginSchema";
-import InputField from "@/app/_components/form/InputField";
-import SocialButton from "@/app/_components/form/SocialsButton";
+import { loginSchema } from "@/app/_lib/_schemas/loginSchema";
+import InputField from "@/app/_components/authform/InputField";
+import SocialButton from "@/app/_components/authform/SocialsButton";
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type LoginFormValues = z.infer<typeof loginSchema>;
 
-const LoginPage = () => {
+export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
+  } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Login data ✅", data);
-    alert("Login successful!");
+  const onSubmit = async (values: LoginFormValues) => {
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      console.log(values); // You will replace this with API call later
+      alert("Login successful!");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -34,6 +53,12 @@ const LoginPage = () => {
         <h2 className="text-2xl font-semibold text-center mb-6">
           Welcome back
         </h2>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+            {error}
+          </div>
+        )}
 
         <form
           className="space-y-5"
@@ -68,19 +93,20 @@ const LoginPage = () => {
                 </span>
               }
             />
-            <a
-              href="#"
+            <Link
+              href="/forgot-password"
               className="text-sm text-indigo-600 hover:underline mt-1 inline-block"
             >
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition cursor-pointer"
+            className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
           >
-            Login
+            {isSubmitting ? "Logging in..." : "Login"}
           </button>
         </form>
 
@@ -106,13 +132,11 @@ const LoginPage = () => {
 
         <p className="text-center text-sm text-gray-600 mt-6">
           New to FelegeHiwot?{" "}
-          <a href="/auth/signup" className="text-indigo-600 hover:underline">
+          <a href="/signup" className="text-indigo-600 hover:underline">
             Sign up
           </a>
         </p>
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}

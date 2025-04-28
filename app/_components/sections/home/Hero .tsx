@@ -14,10 +14,10 @@ const HeroSection = () => {
             educators.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-indigo-600 text-white px-8 py-4 text-lg rounded-md hover:bg-indigo-700 transition">
+            <button className="bg-indigo-600 text-white px-8 py-4 text-lg rounded-md hover:bg-indigo-700 transition cursor-pointer">
               Start Free Spiritual Journey
             </button>
-            <button className="text-indigo-600 bg-gray-50 px-8 py-4 text-lg border border-indigo-200 rounded-md hover:bg-indigo-100 transition">
+            <button className="text-indigo-600 bg-gray-50 px-8 py-4 text-lg border border-indigo-200 rounded-md hover:bg-indigo-100 transition cursor-pointer">
               Explore Lessons
             </button>
           </div>
