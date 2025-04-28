@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema, SignupFormData } from "@/app/lib/signupSchema";
+import { signupSchema, SignupFormData } from "@/app/_lib/_schemas/signupSchema";
 import { FaFacebook, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import InputField from "@/app/_components/form/InputField";
-import SocialButton from "@/app/_components/form/SocialsButton";
+import InputField from "@/app/_components/authform/InputField";
+import SocialButton from "@/app/_components/authform/SocialsButton";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +19,11 @@ const SignUpPage = () => {
     formState: { errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      fullName: "",
+    },
   });
 
   const onSubmit = (data: SignupFormData) => {
@@ -109,7 +114,7 @@ const SignUpPage = () => {
 
         <p className="text-center text-sm text-gray-600 mt-6">
           Already on FelegeHiwot?{" "}
-          <a href="/auth/signin" className="text-indigo-600 hover:underline">
+          <a href="/login" className="text-indigo-600 hover:underline">
             Log in
           </a>
         </p>

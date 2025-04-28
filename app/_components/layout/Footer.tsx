@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone, Globe } from "lucide-react";
 import { FaFacebook, FaTelegram, FaYoutube } from "react-icons/fa";
-
-import footerLinks from "@/app/_constants/FooterText";
+import footerLinks from "@/app/_lib/constants/FooterText";
 
 export default function NewFooter() {
   return (
