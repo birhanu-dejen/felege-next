@@ -1,4 +1,4 @@
-import testimonialsDemo from "@/app/_lib/constants/TestimonialsDemo";
+import testimonialsDemo from "@/lib/constants/TestimonialsDemo";
 
 const Testimonials = () => {
   return (
