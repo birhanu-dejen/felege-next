@@ -1,6 +1,6 @@
 "use client";
 
-import benefits from "@/app/_lib/constants/WhyUsText";
+import benefits from "@/lib/constants/WhyUsText";
 const FelegeHiwotBenefits = () => {
   return (
     <section className="bg-white py-16">

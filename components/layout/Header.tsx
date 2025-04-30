@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { Menu, X, ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
-import navLinks from "@/app/_lib/constants/NavLinkText";
-import Logo from "@/app/_components/ui/Logo";
-import CourseSearchBar from "@/app/_components/ui/SearchBar";
+import navLinks from "@/lib/constants/NavLinkText";
+import Logo from "@/components/ui/Logo";
+import CourseSearchBar from "@/components/ui/SearchBar";
 import Link from "next/link";
 
 export const Navbar = () => {
@@ -17,7 +17,7 @@ export const Navbar = () => {
   const closeMobileMenu = () => setMobileOpen(false);
 
   return (
-    <header className="font-montserrat sticky top-0 z-50 w-full bg-white shadow-sm">
+    <header className="font-montserrat sticky top-0 z-50 w-full bg-white shadow-sm ">
       <div className="container flex h-[70px] items-center justify-between px-4">
         <Logo />
 

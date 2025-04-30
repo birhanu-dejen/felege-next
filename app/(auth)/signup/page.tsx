@@ -1,23 +1,30 @@
 "use client";
-
-import { useState } from "react";
+import z from "zod";
+import Link from "next/link";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema, SignupFormData } from "@/app/_lib/_schemas/signupSchema";
+import { signupSchema } from "@/lib/schemas/signupSchema";
 import { FaFacebook, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import InputField from "@/app/_components/authform/InputField";
-import SocialButton from "@/app/_components/authform/SocialsButton";
-
+import InputField from "@/components/authform/InputField";
+import SocialButton from "@/components/authform/SocialsButton";
+import { FormError } from "@/components/authform/FormError";
+import { FormSuccess } from "@/components/authform/FormSucess";
+import { signup } from "@/actions/signup";
+type signupFormValues = z.infer<typeof signupSchema>;
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [success, setSuccess] = useState<string | undefined>(undefined);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupFormData>({
+  } = useForm<signupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       email: "",
@@ -26,9 +33,15 @@ const SignUpPage = () => {
     },
   });
 
-  const onSubmit = (data: SignupFormData) => {
-    console.log("Signup data ✅", data);
-    alert("Signup successful!");
+  const onSubmit = (values: signupFormValues) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      signup(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
   };
 
   return (
@@ -51,6 +64,7 @@ const SignUpPage = () => {
             placeholder="Enter your full name"
             register={register}
             error={errors.fullName?.message}
+            isPending={isPending}
           />
 
           <InputField
@@ -61,6 +75,7 @@ const SignUpPage = () => {
             placeholder="name@email.com"
             register={register}
             error={errors.email?.message}
+            isPending={isPending}
           />
 
           <InputField
@@ -71,9 +86,10 @@ const SignUpPage = () => {
             placeholder="Create a password"
             register={register}
             error={errors.password?.message}
+            isPending={isPending}
             customInput={
               <span
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => !isPending && setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer text-xl"
               >
                 {showPassword ? <FiEyeOff /> : <FiEye />}
@@ -84,11 +100,22 @@ const SignUpPage = () => {
             Between 8 and 72 characters
           </p>
 
+          {/* Always visible feedback section */}
+          <div className="space-y-2">
+            {error && <FormError message={error} />}
+            {success && <FormSuccess message={success} />}
+          </div>
+
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition cursor-pointer"
+            disabled={isPending}
+            className={`w-full py-2 rounded-md transition text-white ${
+              isPending
+                ? "bg-indigo-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
+            }`}
           >
-            Join for Free
+            {isPending ? "Processing..." : "Join for Free"}
           </button>
         </form>
 
@@ -114,13 +141,13 @@ const SignUpPage = () => {
 
         <p className="text-center text-sm text-gray-600 mt-6">
           Already on FelegeHiwot?{" "}
-          <a href="/login" className="text-indigo-600 hover:underline">
+          <Link href="/login" className="text-indigo-600 hover:underline">
             Log in
-          </a>
+          </Link>
         </p>
 
         <p className="text-xs text-gray-500 text-center mt-4">
-          I accept FelegeHiwot’s{" "}
+          I accept FelegeHiwot&apos;s{" "}
           <a href="#" className="underline">
             Terms of Use
           </a>{" "}

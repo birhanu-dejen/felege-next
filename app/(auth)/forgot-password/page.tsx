@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import InputField from "@/app/_components/authform/InputField"; // <- Corrected import path
+import InputField from "@/components/authform/InputField"; // <- Corrected import path
 import Link from "next/link";
 
 interface ForgotPasswordFormValues {

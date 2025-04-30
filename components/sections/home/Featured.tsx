@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 
-import featuredCourses from "@/app/_lib/constants/FeaturedCoursesDemo";
+import featuredCourses from "@/lib/constants/FeaturedCoursesDemo";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
 export default function FeaturedCourses() {
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="bg-white py-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-semibold text-gray-800 text-center mb-12">
           Explore Our Featured Teachings

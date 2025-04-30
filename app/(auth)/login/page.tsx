@@ -1,6 +1,6 @@
 "use client";
-
-import React, { useState } from "react";
+import { login } from "@/actions/login";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
@@ -8,16 +8,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaApple } from "react-icons/fa";
-import { loginSchema } from "@/app/_lib/_schemas/loginSchema";
-import InputField from "@/app/_components/authform/InputField";
-import SocialButton from "@/app/_components/authform/SocialsButton";
+
+import { loginSchema } from "@/lib/schemas/loginSchema";
+import InputField from "@/components/authform/InputField";
+import SocialButton from "@/components/authform/SocialsButton";
+import { FormError } from "@/components/authform/FormError";
+import { FormSuccess } from "@/components/authform/FormSucess";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
 
   const {
     register,
@@ -31,20 +35,15 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = async (values: LoginFormValues) => {
-    setIsSubmitting(true);
-    setError(null);
-
-    try {
-      console.log(values); // You will replace this with API call later
-      alert("Login successful!");
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred"
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = (values: LoginFormValues) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
   };
 
   return (
@@ -53,12 +52,6 @@ export default function LoginPage() {
         <h2 className="text-2xl font-semibold text-center mb-6">
           Welcome back
         </h2>
-
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-            {error}
-          </div>
-        )}
 
         <form
           className="space-y-5"
@@ -73,6 +66,7 @@ export default function LoginPage() {
             placeholder="name@email.com"
             register={register}
             error={errors.email?.message}
+            isPending={isPending}
           />
 
           <div>
@@ -84,10 +78,12 @@ export default function LoginPage() {
               placeholder="Enter your password"
               register={register}
               error={errors.password?.message}
+              isPending={isPending}
               customInput={
                 <span
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => !isPending && setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer text-xl"
+                  aria-label="Toggle password visibility"
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </span>
@@ -95,18 +91,36 @@ export default function LoginPage() {
             />
             <Link
               href="/forgot-password"
-              className="text-sm text-indigo-600 hover:underline mt-1 inline-block"
+              className={`text-sm text-indigo-600 hover:underline mt-1 inline-block ${
+                isPending ? "pointer-events-none opacity-70" : ""
+              }`}
             >
               Forgot password?
             </Link>
           </div>
 
+          {error && (
+            <div className="mt-1">
+              <FormError message={error} />
+            </div>
+          )}
+
+          {success && (
+            <div className="mt-1">
+              <FormSuccess message={success} />
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-            disabled={isSubmitting}
+            disabled={isPending}
+            className={`w-full py-2 rounded-md transition text-white ${
+              isPending
+                ? "bg-indigo-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
+            }`}
           >
-            {isSubmitting ? "Logging in..." : "Login"}
+            {isPending ? "Logging in..." : "Login"}
           </button>
         </form>
 
@@ -132,9 +146,14 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-gray-600 mt-6">
           New to FelegeHiwot?{" "}
-          <a href="/signup" className="text-indigo-600 hover:underline">
+          <Link
+            href="/signup"
+            className={`text-indigo-600 hover:underline ${
+              isPending ? "pointer-events-none opacity-70" : ""
+            }`}
+          >
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>

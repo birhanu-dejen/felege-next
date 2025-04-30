@@ -11,6 +11,7 @@ interface InputFieldProps<T extends FieldValues> {
   required?: boolean;
   className?: string;
   customInput?: ReactNode;
+  isPending?: boolean; // New prop
 }
 
 const InputField = <T extends FieldValues>({
@@ -23,19 +24,22 @@ const InputField = <T extends FieldValues>({
   required = false,
   className = "",
   customInput,
+  isPending = false, // Default to false
 }: InputFieldProps<T>) => {
   const inputClasses = `w-full px-3 py-2 border rounded-sm focus:outline-none focus:ring-2 transition-colors ${
     error
       ? "border-red-500 focus:ring-red-200"
       : "border-gray-300 focus:border-indigo-600 focus:ring-indigo-200"
-  }`;
+  } ${isPending ? "opacity-70 cursor-not-allowed" : ""}`;
 
   return (
     <div className={`mb-4 ${className}`}>
       {label && (
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className={`block text-sm font-medium text-gray-700 mb-1 ${
+            isPending ? "opacity-70" : ""
+          }`}
         >
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
@@ -49,6 +53,7 @@ const InputField = <T extends FieldValues>({
           placeholder={placeholder}
           autoComplete="off"
           className={inputClasses}
+          disabled={isPending}
           {...register(name)}
         />
         {customInput}
