@@ -1,10 +1,6 @@
-// lib/prisma.ts
-
 import { PrismaClient } from "@prisma/client";
 
-// Add PrismaClient to the NodeJS global type to prevent hot-reload issues
 declare global {
-  // allow global `var` in TypeScript
   // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }

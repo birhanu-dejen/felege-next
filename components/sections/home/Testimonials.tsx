@@ -1,4 +1,4 @@
-import testimonialsDemo from "@/lib/constants/TestimonialsDemo";
+import { testimonials } from "@/lib/constants";
 
 const Testimonials = () => {
   return (
@@ -9,7 +9,7 @@ const Testimonials = () => {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonialsDemo.map((item, index) => (
+          {testimonials.map((item, index) => (
             <div
               key={index}
               className="border border-gray-200 shadow-sm p-6 space-y-4 rounded-lg"

@@ -6,18 +6,23 @@ import { z } from "zod";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaApple } from "react-icons/fa";
+import Social from "@/components/auth/social";
 
-import { loginSchema } from "@/lib/schemas/loginSchema";
-import InputField from "@/components/authform/InputField";
-import SocialButton from "@/components/authform/SocialsButton";
-import { FormError } from "@/components/authform/FormError";
-import { FormSuccess } from "@/components/authform/FormSucess";
+import { LoginSchema } from "@/lib/schemas";
+import InputField from "@/components/auth/Inputfield";
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+import { FormError } from "@/components/auth/formerror";
+import { FormSuccess } from "@/components/auth/formsuccess";
+import { useSearchParams } from "next/navigation";
+
+type LoginFormValues = z.infer<typeof LoginSchema>;
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider!"
+      : "";
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | undefined>("");
@@ -28,7 +33,7 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -40,8 +45,8 @@ export default function LoginPage() {
     setSuccess("");
     startTransition(() => {
       login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        setSuccess(data?.success);
       });
     });
   };
@@ -90,7 +95,7 @@ export default function LoginPage() {
               }
             />
             <Link
-              href="/forgot-password"
+              href="/auth/forgot-password"
               className={`text-sm text-indigo-600 hover:underline mt-1 inline-block ${
                 isPending ? "pointer-events-none opacity-70" : ""
               }`}
@@ -101,7 +106,7 @@ export default function LoginPage() {
 
           {error && (
             <div className="mt-1">
-              <FormError message={error} />
+              <FormError message={error || urlError} />
             </div>
           )}
 
@@ -120,7 +125,7 @@ export default function LoginPage() {
                 : "bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
             }`}
           >
-            {isPending ? "Logging in..." : "Login"}
+            {isPending ? "Processing..." : "Login"}
           </button>
         </form>
 
@@ -131,17 +136,7 @@ export default function LoginPage() {
         </div>
 
         <div className="space-y-3">
-          <SocialButton Icon={FcGoogle} text="Continue with Google" />
-          <SocialButton
-            Icon={FaFacebook}
-            text="Continue with Facebook"
-            color="text-blue-600"
-          />
-          <SocialButton
-            Icon={FaApple}
-            text="Continue with Apple"
-            color="text-gray-800"
-          />
+          <Social />
         </div>
 
         <p className="text-center text-sm text-gray-600 mt-6">

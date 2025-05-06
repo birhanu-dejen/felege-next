@@ -4,16 +4,14 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema } from "@/lib/schemas/signupSchema";
-import { FaFacebook, FaApple } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import { SignupSchema } from "@/lib/schemas";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import InputField from "@/components/authform/InputField";
-import SocialButton from "@/components/authform/SocialsButton";
-import { FormError } from "@/components/authform/FormError";
-import { FormSuccess } from "@/components/authform/FormSucess";
+import InputField from "@/components/auth/Inputfield";
+import Social from "@/components/auth/social";
+import { FormError } from "@/components/auth/formerror";
+import { FormSuccess } from "@/components/auth/formsuccess";
 import { signup } from "@/actions/signup";
-type signupFormValues = z.infer<typeof signupSchema>;
+type SignupFormValues = z.infer<typeof SignupSchema>;
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -24,8 +22,8 @@ const SignUpPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<signupFormValues>({
-    resolver: zodResolver(signupSchema),
+  } = useForm<SignupFormValues>({
+    resolver: zodResolver(SignupSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -33,7 +31,7 @@ const SignUpPage = () => {
     },
   });
 
-  const onSubmit = (values: signupFormValues) => {
+  const onSubmit = (values: SignupFormValues) => {
     setError("");
     setSuccess("");
     startTransition(() => {
@@ -101,7 +99,7 @@ const SignUpPage = () => {
           </p>
 
           {/* Always visible feedback section */}
-          <div className="space-y-2">
+          <div className="mt-1">
             {error && <FormError message={error} />}
             {success && <FormSuccess message={success} />}
           </div>
@@ -124,24 +122,11 @@ const SignUpPage = () => {
           <span className="px-3 text-gray-500 text-sm">or</span>
           <div className="flex-grow h-px bg-gray-300"></div>
         </div>
-
-        <div className="space-y-3">
-          <SocialButton Icon={FcGoogle} text="Continue with Google" />
-          <SocialButton
-            Icon={FaFacebook}
-            text="Continue with Facebook"
-            color="text-blue-600"
-          />
-          <SocialButton
-            Icon={FaApple}
-            text="Continue with Apple"
-            color="text-gray-800"
-          />
-        </div>
+        <Social />
 
         <p className="text-center text-sm text-gray-600 mt-6">
           Already on FelegeHiwot?{" "}
-          <Link href="/login" className="text-indigo-600 hover:underline">
+          <Link href="/auth/login" className="text-indigo-600 hover:underline">
             Log in
           </Link>
         </p>
