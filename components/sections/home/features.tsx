@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 
-import featuredCourses from "@/lib/constants/FeaturedCoursesDemo";
+import { featuredCourses } from "@/lib/constants";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 

@@ -1,12 +1,12 @@
-import Navbar from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
 import "./globals.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <header>
+        <header className="pt-[70px]">
           <Navbar />
         </header>
 
