@@ -1,17 +1,17 @@
-import HeroSection from "@/components/sections/home/Hero ";
-import CoursesSection from "@/components/sections/home/Featured";
-import TestimonialsSection from "@/components/sections/home/Testimonials";
-import WhyOursSection from "@/components/sections/home/WhyUs";
-import CTASection from "@/components/sections/home/CallToAction";
+import Hero from "@/components/sections/home/hero";
+import Courses from "@/components/sections/home/features";
+import Testimonials from "@/components/sections/home/testimonials";
+import Benefits from "@/components/sections/home/benefits";
+import CallToAction from "@/components/sections/home/calltoaction";
 
 export default function Home() {
   return (
     <>
-      <HeroSection />
-      <WhyOursSection />
-      <CoursesSection />
-      <TestimonialsSection />
-      <CTASection />
+      <Hero />
+      <Benefits />
+      <Courses />
+      <Testimonials />
+      <CallToAction />
     </>
   );
 }

@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-const HeroSection = () => {
+const Hero = () => {
   return (
-    <section className="bg-[#f5f9ff] py-12 px-4 sm:px-6 lg:px-8">
+    <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
         <div className="lg:w-1/2 space-y-6">
           <h2 className="text-4xl md:text-5xl font-semibold text-gray-800 leading-tight">
@@ -56,4 +56,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection;
+export default Hero;

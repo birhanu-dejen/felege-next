@@ -11,7 +11,7 @@ interface InputFieldProps<T extends FieldValues> {
   required?: boolean;
   className?: string;
   customInput?: ReactNode;
-  isPending?: boolean; // New prop
+  isPending?: boolean;
 }
 
 const InputField = <T extends FieldValues>({
@@ -24,7 +24,7 @@ const InputField = <T extends FieldValues>({
   required = false,
   className = "",
   customInput,
-  isPending = false, // Default to false
+  isPending = false,
 }: InputFieldProps<T>) => {
   const inputClasses = `w-full px-3 py-2 border rounded-sm focus:outline-none focus:ring-2 transition-colors ${
     error

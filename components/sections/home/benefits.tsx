@@ -1,7 +1,7 @@
 "use client";
 
-import benefits from "@/lib/constants/WhyUsText";
-const FelegeHiwotBenefits = () => {
+import { benefits } from "@/lib/constants";
+const Benefits = () => {
   return (
     <section className="bg-white py-16">
       <div className="max-w-6xl mx-auto px-4 text-center">
@@ -26,4 +26,4 @@ const FelegeHiwotBenefits = () => {
   );
 };
 
-export default FelegeHiwotBenefits;
+export default Benefits;
