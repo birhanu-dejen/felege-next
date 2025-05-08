@@ -1,61 +1,79 @@
 "use server";
 
 import { NewPasswordSchema } from "@/lib/schemas";
-import { db } from "@/lib/db"; // your Prisma client
+import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { getPasswordResetTokenByToken } from "@/data/reset-token";
+import { getUserByEmail } from "@/data/user";
 
 type NewPasswordFormValues = z.infer<typeof NewPasswordSchema>;
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * Resets the user's password using a provided reset token and new password values.
- *
- * @param values - An object containing the new password to be set.
- * @param token - A string representing the password reset token.
- *
- * @returns An object with either a success message indicating the password was reset
- *          or an error message if any step in the process fails, such as missing token,
- *          invalid password input, or issues during token validation or password update.
- */
+type PasswordResetResponse = {
+  success?: string;
+  error?: string;
+};
 
-/*******  7b35359e-b397-4c26-b782-b2efaf5d2ef4  *******/ export const newPassword =
-  async (values: NewPasswordFormValues, token: string | null) => {
-    // 1. Check for missing token
-    if (!token) {
-      return { error: "Token is missing." };
+const MAX_ATTEMPTS = 5;
+
+export const newPassword = async (
+  values: NewPasswordFormValues,
+  token: string | null
+): Promise<PasswordResetResponse> => {
+  if (!token) {
+    return { error: "Reset token is missing." };
+  }
+
+  const validatedFields = NewPasswordSchema.safeParse(values);
+  if (!validatedFields.success) {
+    return { error: "Invalid input. Please check your password requirements." };
+  }
+
+  const { password } = validatedFields.data;
+
+  try {
+    const existingToken = await getPasswordResetTokenByToken(token);
+
+    if (!existingToken) {
+      return { error: "This reset token is invalid or has already been used." };
     }
 
-    // 2. Validate password input
-    const validatedFields = NewPasswordSchema.safeParse(values);
-    if (!validatedFields.success) {
-      return { error: "Invalid password." };
+    if (existingToken.attempts >= MAX_ATTEMPTS) {
+      return { error: "Too many reset attempts. This token has been locked." };
     }
 
-    const { password } = validatedFields.data;
+    if (new Date(existingToken.expires) < new Date()) {
+      return { error: "This reset token has expired." };
+    }
 
+    const existingUser = await getUserByEmail(existingToken.email);
+    if (!existingUser) {
+      return { error: "No user found for this reset request." };
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await db.user.update({
+      where: { id: existingUser.id },
+      data: { password: hashedPassword },
+    });
+
+    await db.passwordResetToken.delete({
+      where: { id: existingToken.id },
+    });
+
+    return { success: "Your password has been reset successfully." };
+  } catch (error) {
     try {
-      // 3. Check if token is valid and not expired
-      const existingUser = await getUserByPasswordResetToken(token);
-      if (!existingUser) {
-        return { error: "Invalid or expired reset token." };
-      }
-
-      // 4. Hash the new password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // 5. Update user's password
-      await db.user.update({
-        where: { id: existingUser.id },
-        data: { password: hashedPassword },
+      await db.passwordResetToken.update({
+        where: { id: (await getPasswordResetTokenByToken(token))?.id ?? "" },
+        data: { attempts: { increment: 1 } },
       });
-
-      // 6. Delete the reset token
-      await deletePasswordResetToken(token);
-
-      return { success: "Your password has been reset successfully!" };
-    } catch (error) {
-      console.error("Password reset error:", error);
-      return { error: "Something went wrong. Please try again." };
+    } catch (updateError) {
+      console.error("Failed to increment reset attempts:", updateError);
     }
-  };
+
+    console.error("Password reset error:", error);
+    return { error: "Something went wrong. Please try again later." };
+  }
+};

@@ -1,4 +1,3 @@
-// components/ui/DividerWithText.tsx
 export default function DividerWithText({ text }: { text: string }) {
   return (
     <div className="flex items-center my-6">

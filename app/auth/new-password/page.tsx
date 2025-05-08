@@ -1,68 +1,66 @@
 "use client";
-
-import { useState } from "react";
+import React, { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { reset } from "@/actions/reset";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { ArrowLeft } from "lucide-react";
+import { NewPasswordSchema } from "@/lib/schemas";
+import { newPassword } from "@/actions/new-password";
+import InputField from "@/components/auth/Inputfield";
 import { FormError } from "@/components/auth/formerror";
 import { FormSuccess } from "@/components/auth/formsuccess";
 import FormWrapper from "@/components/ui/formwrapper";
 import { SubmitButton } from "@/components/ui/submitbutton";
-import InputField from "@/components/auth/Inputfield";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react"; // ✅ Correct import
-
-const NewPasswordPage = () => {
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+type NewPasswordFormValues = z.infer<typeof NewPasswordSchema>;
+export default function NewPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
-
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<NewPasswordFormValues>({
+    resolver: zodResolver(NewPasswordSchema),
+    defaultValues: {
+      password: "",
+    },
+  });
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    setSuccess(null);
+  const onSubmit = (values: NewPasswordFormValues) => {
+    setError(undefined);
+    setSuccess(undefined);
 
-    if (!token) {
-      setError("Missing token.");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const result = await reset({ token, password });
-      if (result.error) {
-        setError(result.error);
-      } else {
-        setSuccess(result.success || "Password successfully reset!");
-      }
-    } catch {
-      setError("Something went wrong.");
-    } finally {
-      setIsLoading(false);
-    }
+    startTransition(() => {
+      newPassword(values, token).then((data) => {
+        setError(data?.error);
+        setSuccess(data?.success);
+      });
+    });
   };
 
   return (
-    <FormWrapper title="Enter a New Password">
-      <form onSubmit={onSubmit} className="space-y-4">
+    <FormWrapper title="Reset Your Password">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <InputField
-          label="Password"
+          label="New Password"
           name="password"
           type={showPassword ? "text" : "password"}
           required
-          placeholder="Create a password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Create a strong password"
+          register={register}
+          error={errors.password?.message}
+          isPending={isPending}
           customInput={
             <span
-              onClick={() => !isLoading && setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer text-xl"
+              onClick={() => !isPending && setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-3 flex items-center text-muted-foreground cursor-pointer text-xl"
               aria-label="Toggle password visibility"
             >
               {showPassword ? <FiEyeOff /> : <FiEye />}
@@ -72,18 +70,17 @@ const NewPasswordPage = () => {
 
         {error && <FormError message={error} />}
         {success && <FormSuccess message={success} />}
-        <SubmitButton isLoading={isLoading}>Reset Password</SubmitButton>
+
+        <SubmitButton isLoading={isPending}>Reset Password</SubmitButton>
       </form>
 
       <Link
         href="/auth/login"
-        className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-indigo-600 hover:underline mt-4"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-indigo-600 hover:underline mt-4"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Login
       </Link>
     </FormWrapper>
   );
-};
-
-export default NewPasswordPage;
+}

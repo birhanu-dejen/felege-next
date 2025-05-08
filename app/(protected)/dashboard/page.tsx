@@ -1,4 +1,8 @@
+"use client";
+
 import { Home, BookOpen, User, LogOut } from "lucide-react";
+import { signOut } from "next-auth/react"; // Make sure this import is present
+
 const courses = [
   {
     title: "Foundations of Orthodox Faith",
@@ -25,7 +29,6 @@ const courses = [
 export default function Dashboard() {
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <aside className="w-64 bg-white p-6 border-r shadow-sm hidden md:block">
         <h2 className="text-2xl font-bold mb-8 text-indigo-600">
           Felege Hiowot
@@ -49,16 +52,17 @@ export default function Dashboard() {
           >
             <User size={20} /> Profile
           </a>
-          <a
-            href="#"
-            className="flex items-center gap-3 text-gray-700 hover:text-red-500"
+
+          {/* Sign Out Button */}
+          <button
+            onClick={() => signOut({ callbackUrl: "/auth/login" })}
+            className="flex items-center gap-3 text-gray-700 hover:text-red-500 w-full text-left"
           >
             <LogOut size={20} /> Logout
-          </a>
+          </button>
         </nav>
       </aside>
 
-      {/* Main content */}
       <main className="flex-1 p-6">
         <h1 className="text-3xl font-semibold mb-6">Welcome back!</h1>
         <h2 className="text-xl font-medium mb-4">Continue Learning</h2>
@@ -74,7 +78,6 @@ export default function Dashboard() {
                 Instructor: {course.instructor}
               </p>
 
-              {/* Progress bar */}
               <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
                 <div
                   className="bg-indigo-600 h-3 rounded-full"

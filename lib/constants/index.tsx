@@ -42,8 +42,7 @@ export const featuredCourses = [
   {
     title: "Introduction to Orthodox Theology",
     image: "/democourse-images/theology.jpg",
-    description:
-      "Explore the foundations of Orthodox Christian theology through scripture and tradition.",
+    description: "Understand Orthodox beliefs through scripture and tradition.",
     instructor: "Fr. Daniel Kebede",
     duration: "5h 30m",
     rating: 4.8,
@@ -51,8 +50,7 @@ export const featuredCourses = [
   {
     title: "The Lives of Saints",
     image: "/democourse-images/saints.jpeg",
-    description:
-      "Learn from the lives of saints who have inspired generations of Orthodox faithful.",
+    description: "Discover inspiring stories of Orthodox Christian saints.",
     instructor: "Sr. Hanna Alem",
     duration: "3h 45m",
     rating: 4.7,
@@ -60,28 +58,31 @@ export const featuredCourses = [
   {
     title: "Orthodox Christian Spirituality",
     image: "/democourse-images/ortodox-peoples.webp",
-    description:
-      "Understand prayer, fasting, and ascetic practices that deepen spiritual growth.",
+    description: "Explore prayer, fasting, and spiritual practices.",
     instructor: "Dr. Yohannes Tesfaye",
     duration: "6h 15m",
     rating: 4.9,
   },
 ];
+
 export const testimonials = [
   {
     name: "Mekdes Teshome",
     image: "https://randomuser.me/api/portraits/women/65.jpg",
     text: "Felege Hiwot has become a vital part of my spiritual routine. The teachings are grounded in Orthodox tradition and presented in a way that’s both engaging and accessible. I feel more connected to my faith every day.",
+    location: "addis ababa",
   },
   {
     name: "Abba Mulugeta",
     image: "https://randomuser.me/api/portraits/men/75.jpg",
     text: "As a servant of the Church, I highly appreciate Felege Hiwot's commitment to preserving the richness of Orthodox teachings. The platform is well-structured, authentic, and spiritually nourishing for believers at every stage.",
+    location: "addis ababa",
   },
   {
     name: "Selamawit Endale",
     image: "https://randomuser.me/api/portraits/women/68.jpg",
     text: "Felege Hiwot allows me to grow spiritually in the midst of a busy life. The content is inspiring and faithful to our Orthodox values. I’ve recommended it to many friends and family members.",
+    location: "addis ababa",
   },
 ];
 export const footerLinks = [

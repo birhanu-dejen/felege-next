@@ -27,6 +27,7 @@ export const {
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider !== "credentials") return true;
+      //todo fix this user.id type
       const existingUser = await getUserById(user.id);
       if (!existingUser?.emailVerified) return false;
       return true;

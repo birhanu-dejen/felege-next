@@ -20,17 +20,13 @@ const ForgotPasswordPage = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ResetFormValues>({
+  const { register, handleSubmit } = useForm<ResetFormValues>({
     resolver: zodResolver(ResetSchema),
     defaultValues: {
       email: "",
     },
   });
-
+  //todo search what it returns the useform
   const onSubmit = (values: ResetFormValues) => {
     setError("");
     setSuccess("");
@@ -60,7 +56,7 @@ const ForgotPasswordPage = () => {
           required
           isPending={isPending}
         />
-        <div className="mb">
+        <div className="mb-4">
           {error && <FormError message={error} />}
           {success && <FormSuccess message={success} />}
         </div>
