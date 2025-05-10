@@ -1,21 +1,26 @@
-import { FaGraduationCap, FaTags, FaBook } from "react-icons/fa";
+import { FaGraduationCap, FaTags, FaBook, FaLightbulb } from "react-icons/fa";
 import { Book, Users, ScrollText } from "lucide-react";
 export const navLinks = [
   {
     name: "All Courses",
-    href: "#courses",
+    href: "/courses",
     icon: <FaGraduationCap />,
   },
 
   {
-    name: "Plans & Pricing",
-    href: "#pricing",
+    name: "Pricing",
+    href: "/pricing",
     icon: <FaTags />,
   },
   {
-    name: "Learning Resources",
-    href: "#resources",
+    name: "Free Resources",
+    href: "/resources",
     icon: <FaBook />,
+  },
+  {
+    name: "Our Mission",
+    href: "/mission",
+    icon: <FaLightbulb />,
   },
 ];
 export const benefits = [
@@ -67,20 +72,20 @@ export const featuredCourses = [
 
 export const testimonials = [
   {
-    name: "Mekdes Teshome",
-    image: "https://randomuser.me/api/portraits/women/65.jpg",
+    name: "barka bekele",
+    image: "/avatars/avatar-1.jpg",
     text: "Felege Hiwot has become a vital part of my spiritual routine. The teachings are grounded in Orthodox tradition and presented in a way that’s both engaging and accessible. I feel more connected to my faith every day.",
     location: "addis ababa",
   },
   {
     name: "Abba Mulugeta",
-    image: "https://randomuser.me/api/portraits/men/75.jpg",
+    image: "/avatars/avatar-2.jpg",
     text: "As a servant of the Church, I highly appreciate Felege Hiwot's commitment to preserving the richness of Orthodox teachings. The platform is well-structured, authentic, and spiritually nourishing for believers at every stage.",
     location: "addis ababa",
   },
   {
     name: "Selamawit Endale",
-    image: "https://randomuser.me/api/portraits/women/68.jpg",
+    image: "/avatars/avatar-3.jpg",
     text: "Felege Hiwot allows me to grow spiritually in the midst of a busy life. The content is inspiring and faithful to our Orthodox values. I’ve recommended it to many friends and family members.",
     location: "addis ababa",
   },

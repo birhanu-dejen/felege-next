@@ -7,7 +7,7 @@ const FROM_EMAIL = process.env.EMAIL_FROM || "no-reply@felegehiwot.com";
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const resetLink = `${baseUrl}/auth/new-password?token=${token}`;
+    const resetLink = `${baseUrl}/new-password?token=${token}`;
 
     await resend.emails.send({
       from: FROM_EMAIL,
@@ -36,7 +36,7 @@ export const sendVerificationEmail = async (
 ) => {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const confirmLink = `${baseUrl}/auth/new-verification?token=${token}`;
+    const confirmLink = `${baseUrl}/new-verification?token=${token}`;
 
     await resend.emails.send({
       from: FROM_EMAIL,

@@ -26,7 +26,7 @@ const ForgotPasswordPage = () => {
       email: "",
     },
   });
-  //todo search what it returns the useform
+
   const onSubmit = (values: ResetFormValues) => {
     setError("");
     setSuccess("");
@@ -64,10 +64,7 @@ const ForgotPasswordPage = () => {
         <SubmitButton isLoading={isPending}>Send reset email</SubmitButton>
       </form>
       <div className="text-center mt-6">
-        <Link
-          href="/auth/login"
-          className="text-indigo-600 hover:underline text-sm"
-        >
+        <Link href="/login" className="text-indigo-600 hover:underline text-sm">
           Back to Log in
         </Link>
       </div>

@@ -25,7 +25,6 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
       return { error: "User already exists" };
     }
 
-    //todo if the error occurs in the line 36 its due to the removing of user default
     await db.user.create({
       data: {
         fullName,

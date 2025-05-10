@@ -1,5 +1,4 @@
 "use server";
-
 import { NewPasswordSchema } from "@/lib/schemas";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
@@ -9,23 +8,18 @@ import { getUserByEmail } from "@/data/user";
 
 type NewPasswordFormValues = z.infer<typeof NewPasswordSchema>;
 
-type PasswordResetResponse = {
-  success?: string;
-  error?: string;
-};
-
-const MAX_ATTEMPTS = 5;
-
 export const newPassword = async (
   values: NewPasswordFormValues,
   token: string | null
-): Promise<PasswordResetResponse> => {
+) => {
   if (!token) {
+    console.error("Reset token is missing");
     return { error: "Reset token is missing." };
   }
 
   const validatedFields = NewPasswordSchema.safeParse(values);
   if (!validatedFields.success) {
+    console.error("Invalid input:", validatedFields.error);
     return { error: "Invalid input. Please check your password requirements." };
   }
 
@@ -35,19 +29,19 @@ export const newPassword = async (
     const existingToken = await getPasswordResetTokenByToken(token);
 
     if (!existingToken) {
+      console.error("Invalid or expired token");
       return { error: "This reset token is invalid or has already been used." };
     }
 
-    if (existingToken.attempts >= MAX_ATTEMPTS) {
-      return { error: "Too many reset attempts. This token has been locked." };
-    }
-
-    if (new Date(existingToken.expires) < new Date()) {
+    const hasExpired = new Date(existingToken.expires) < new Date();
+    if (hasExpired) {
+      console.error("Token has expired");
       return { error: "This reset token has expired." };
     }
 
     const existingUser = await getUserByEmail(existingToken.email);
     if (!existingUser) {
+      console.error("No user found for this reset request");
       return { error: "No user found for this reset request." };
     }
 
@@ -64,15 +58,6 @@ export const newPassword = async (
 
     return { success: "Your password has been reset successfully." };
   } catch (error) {
-    try {
-      await db.passwordResetToken.update({
-        where: { id: (await getPasswordResetTokenByToken(token))?.id ?? "" },
-        data: { attempts: { increment: 1 } },
-      });
-    } catch (updateError) {
-      console.error("Failed to increment reset attempts:", updateError);
-    }
-
     console.error("Password reset error:", error);
     return { error: "Something went wrong. Please try again later." };
   }

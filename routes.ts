@@ -1,11 +1,18 @@
-export const publicRoutes: string[] = ["/", "/auth/new-verification"];
+export const publicRoutes: string[] = [
+  "/",
+  "/new-verification",
+  "/courses",
+  "/pricing",
+  "/mission",
+  "/resources",
+];
 
 export const authRoutes: string[] = [
-  "/auth/login",
-  "/auth/signup",
-  "/auth/reset",
-  "/auth/error",
-  "/auth/new-password",
+  "/login",
+  "/signup",
+  "/reset",
+  "/error",
+  "/new-password",
 ];
 
 export const apiAuthPrefix: string = "/api/auth";

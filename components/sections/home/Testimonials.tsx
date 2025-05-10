@@ -1,6 +1,6 @@
 import { testimonials } from "@/lib/constants";
 import { Quote } from "lucide-react";
-
+import Image from "next/image";
 const Testimonials = () => {
   return (
     <section className="py-20 bg-white text-gray-800">
@@ -22,14 +22,15 @@ const Testimonials = () => {
                 &quot;{item.text}&quot;
               </p>
               <div className="flex items-center mt-auto gap-4">
-                <img
+                <Image
                   src={item.image}
                   alt={item.name}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-indigo-100"
+                  width={50} // 12 * 4 = 48px
+                  height={50}
+                  className="w-12 h-12 rounded-full border-2 border-white" // 12 * 4 = 48px
                 />
                 <div>
                   <p className="font-semibold text-gray-900">{item.name}</p>
-                  {/* Optional: You could add role or date here */}
                 </div>
               </div>
             </div>

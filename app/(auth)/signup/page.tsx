@@ -105,7 +105,7 @@ const SignUpPage = () => {
 
       <p className="text-center text-sm text-gray-600 mt-6">
         Already on FelegeHiwot?{" "}
-        <Link href="/auth/login" className="text-indigo-600 hover:underline">
+        <Link href="/login" className="text-indigo-600 hover:underline">
           Log in
         </Link>
       </p>

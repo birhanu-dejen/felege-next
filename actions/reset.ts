@@ -8,6 +8,7 @@ import { generatePasswordResetToken } from "@/lib/tokens";
 
 export const reset = async (values: z.infer<typeof ResetSchema>) => {
   const validatedFields = ResetSchema.safeParse(values);
+
   if (!validatedFields.success) {
     return { error: "Invalid email format." };
   }
@@ -17,19 +18,20 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
   try {
     const existingUser = await getUserByEmail(email);
 
-    if (!existingUser) {
-      return { error: "Email not found in our system." };
+    if (existingUser) {
+      const passwordResetToken = await generatePasswordResetToken(email);
+      await sendPasswordResetEmail(
+        passwordResetToken.email,
+        passwordResetToken.token
+      );
     }
 
-    const passwordResetToken = await generatePasswordResetToken(email);
-    await sendPasswordResetEmail(
-      passwordResetToken.email,
-      passwordResetToken.token
-    );
-
-    return { success: "Reset email sent if the email exists in our system." };
+    return {
+      success:
+        "If this email exists in our system, you'll receive a reset link shortly.",
+    };
   } catch (error) {
     console.error("Password reset failed:", error);
-    return { error: "Failed to send reset email. Please try again later." };
+    return { error: "Something went wrong. Please try again later." };
   }
 };

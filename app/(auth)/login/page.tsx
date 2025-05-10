@@ -54,7 +54,9 @@ export default function LoginPage() {
     startTransition(() => {
       login(values).then((data) => {
         setError(data?.error);
-        setSuccess(data?.success);
+        setSuccess(
+          typeof data?.success === "string" ? data.success : undefined
+        );
         if (data?.success === true) {
           router.push("/dashboard");
         }
@@ -97,7 +99,7 @@ export default function LoginPage() {
         />
 
         <Link
-          href="/auth/reset"
+          href="/reset"
           className={`text-sm text-indigo-600 hover:underline mt-1 inline-block ${
             isPending ? "pointer-events-none opacity-70" : ""
           }`}
@@ -118,7 +120,7 @@ export default function LoginPage() {
       <p className="text-center text-sm text-muted-foreground mt-6">
         New to FelegeHiwot?{" "}
         <Link
-          href="/auth/signup"
+          href="/signup"
           className={`text-indigo-600 hover:underline ${
             isPending ? "pointer-events-none opacity-70" : ""
           }`}

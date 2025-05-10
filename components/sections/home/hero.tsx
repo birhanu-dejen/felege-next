@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { heroButton } from "@/lib/constants/buttonstyles"; // Import the button constants
+import { heroButton } from "@/lib/constants/buttonstyles";
 
 const Hero = () => {
   return (

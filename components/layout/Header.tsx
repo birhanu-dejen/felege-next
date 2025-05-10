@@ -1,8 +1,8 @@
-"use client";
+"use client"; // Client-side component
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X, ChevronRight } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { navLinks } from "@/lib/constants";
 import { buttonStyles } from "@/lib/constants/buttonstyles";
 import Logo from "@/components/ui/logo";
@@ -12,15 +12,9 @@ import Link from "next/link";
 export const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
-  const isLoginPage = pathname === "/auth/login";
-  const isSignupPage = pathname === "/auth/signup";
-
-  useEffect(() => {
-    router.prefetch("/auth/login");
-    router.prefetch("/auth/signup");
-  }, [router]);
+  const isLoginPage = pathname === "/login";
+  const isSignupPage = pathname === "/signup";
 
   const closeMobileMenu = () => setMobileOpen(false);
 
@@ -49,22 +43,19 @@ export const Navbar = () => {
 
           <div className="flex gap-4 ml-auto lg:mr-16">
             {isLoginPage ? (
-              <Link href="/auth/signup" className={buttonStyles.desktop.signup}>
+              <Link href="/signup" className={buttonStyles.desktop.signup}>
                 Sign Up
               </Link>
             ) : isSignupPage ? (
-              <Link href="/auth/login" className={buttonStyles.desktop.login}>
+              <Link href="/login" className={buttonStyles.desktop.login}>
                 Log In
               </Link>
             ) : (
               <>
-                <Link href="/auth/login" className={buttonStyles.desktop.login}>
+                <Link href="/login" className={buttonStyles.desktop.login}>
                   Log In
                 </Link>
-                <Link
-                  href="/auth/signup"
-                  className={buttonStyles.desktop.signup}
-                >
+                <Link href="/signup" className={buttonStyles.desktop.signup}>
                   Sign Up
                 </Link>
               </>
@@ -111,7 +102,7 @@ export const Navbar = () => {
             <div className="flex flex-col gap-4 px-4">
               {isLoginPage ? (
                 <Link
-                  href="/auth/signup"
+                  href="/signup"
                   onClick={closeMobileMenu}
                   className={buttonStyles.desktop.signup}
                 >
@@ -119,7 +110,7 @@ export const Navbar = () => {
                 </Link>
               ) : isSignupPage ? (
                 <Link
-                  href="/auth/login"
+                  href="/login"
                   onClick={closeMobileMenu}
                   className={buttonStyles.desktop.login}
                 >
@@ -128,14 +119,14 @@ export const Navbar = () => {
               ) : (
                 <>
                   <Link
-                    href="/auth/signup"
+                    href="/signup"
                     onClick={closeMobileMenu}
                     className={buttonStyles.desktop.signup}
                   >
                     Sign Up
                   </Link>
                   <Link
-                    href="/auth/login"
+                    href="/login"
                     onClick={closeMobileMenu}
                     className={buttonStyles.desktop.login}
                   >
