@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -14,6 +13,7 @@ import { newPassword } from "@/actions/new-password";
 import FormWrapper from "@/components/ui/formwrapper";
 import { SubmitButton } from "@/components/ui/submitbutton";
 import { useSearchParams } from "next/navigation";
+import withSearchParams from "@/utils/withsearchparams";
 type NewPasswordFormValues = z.infer<typeof NewPasswordSchema>;
 
 const NewPasswordPage = () => {
@@ -49,7 +49,7 @@ const NewPasswordPage = () => {
           label="Password"
           name="password"
           placeholder="******"
-          register={register} //how i get this props
+          register={register}
           required
           isPending={isPending}
         />
@@ -71,4 +71,4 @@ const NewPasswordPage = () => {
   );
 };
 
-export default NewPasswordPage;
+export default withSearchParams(NewPasswordPage);

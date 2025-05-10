@@ -25,9 +25,9 @@ const Testimonials = () => {
                 <Image
                   src={item.image}
                   alt={item.name}
-                  width={50} // 12 * 4 = 48px
+                  width={50}
                   height={50}
-                  className="w-12 h-12 rounded-full border-2 border-white" // 12 * 4 = 48px
+                  className="w-12 h-12 rounded-full border-2 border-white"
                 />
                 <div>
                   <p className="font-semibold text-gray-900">{item.name}</p>

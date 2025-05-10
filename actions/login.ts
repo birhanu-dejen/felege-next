@@ -48,7 +48,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       return { error: "Invalid credentials" };
     }
 
-    return { success: true }; // Let client redirect after this
+    return { success: true };
   } catch (error) {
     if (error instanceof AuthError) {
       return { error: "Invalid credentials" };

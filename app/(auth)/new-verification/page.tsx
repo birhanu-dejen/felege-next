@@ -6,6 +6,7 @@ import { FormSuccess } from "@/components/auth/formsuccess";
 import { newVerification } from "@/actions/new-verification";
 import { BeatLoader } from "react-spinners";
 import Link from "next/link";
+import withSearchParams from "@/utils/withsearchparams";
 
 const NewVerificationPage = () => {
   const searchParams = useSearchParams();
@@ -73,4 +74,4 @@ const NewVerificationPage = () => {
   );
 };
 
-export default NewVerificationPage;
+export default withSearchParams(NewVerificationPage);

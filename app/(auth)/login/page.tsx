@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import withSearchParams from "@/utils/withsearchparams";
 
 import { login } from "@/actions/login";
 import { LoginSchema } from "@/lib/schemas";
@@ -24,7 +25,7 @@ import DividerWithText from "@/components/ui/divider";
 
 type LoginFormValues = z.infer<typeof LoginSchema>;
 
-export default function LoginPage() {
+function LoginPage() {
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
@@ -131,3 +132,4 @@ export default function LoginPage() {
     </FormWrapper>
   );
 }
+export default withSearchParams(LoginPage);
