@@ -2,18 +2,12 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM_EMAIL = process.env.EMAIL_FROM || "no-reply@example.com";
+const FROM_EMAIL = process.env.EMAIL_FROM || "no-reply@felegehiwot.com";
 
-/**
- * Sends a password reset email.
- */
-export const sendPasswordResetEmail = async (
-  email: string,
-  token: string
-): Promise<void> => {
+export const sendPasswordResetEmail = async (email: string, token: string) => {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const resetLink = `${baseUrl}/auth/new-password?token=${token}`;
+    const resetLink = `${baseUrl}/new-password?token=${token}`;
 
     await resend.emails.send({
       from: FROM_EMAIL,
@@ -35,17 +29,14 @@ export const sendPasswordResetEmail = async (
   }
 };
 
-/**
- * Sends an email verification link.
- */
 export const sendVerificationEmail = async (
   email: string,
   token: string,
   name: string = "User"
-): Promise<void> => {
+) => {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const confirmLink = `${baseUrl}/auth/new-verification?token=${token}`;
+    const confirmLink = `${baseUrl}/new-verification?token=${token}`;
 
     await resend.emails.send({
       from: FROM_EMAIL,

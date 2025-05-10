@@ -4,7 +4,8 @@ import { NextAuthConfig } from "next-auth";
 import { LoginSchema } from "./lib/schemas";
 import { getUserByEmail } from "./data/user";
 import bcrypt from "bcryptjs";
-
+//TODO:the oauth google provider has a bug when i configured it
+//TODO:the oauth apple provider is not yet implemented
 export default {
   providers: [
     Google({

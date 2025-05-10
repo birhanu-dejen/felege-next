@@ -11,7 +11,11 @@ import Social from "@/components/auth/social";
 import { FormError } from "@/components/auth/formerror";
 import { FormSuccess } from "@/components/auth/formsuccess";
 import { signup } from "@/actions/signup";
+import DividerWithText from "@/components/ui/divider";
+import { SubmitButton } from "@/components/ui/submitbutton";
+import FormWrapper from "@/components/ui/formwrapper";
 type SignupFormValues = z.infer<typeof SignupSchema>;
+
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -43,107 +47,81 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex justify-center bg-white px-4 py-6 md:py-2">
-      <div className="w-full max-w-md bg-white p-6 sm:p-8">
-        <h2 className="text-2xl font-semibold text-center mb-6">
-          Create your account
-        </h2>
+    <FormWrapper title="Create your account">
+      <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <InputField
+          label="Full Name"
+          name="fullName"
+          type="text"
+          required
+          placeholder="Enter your full name"
+          register={register}
+          error={errors.fullName?.message}
+          isPending={isPending}
+        />
 
-        <form
-          className="space-y-5"
-          onSubmit={handleSubmit(onSubmit)}
-          autoComplete="off"
-        >
-          <InputField
-            label="Full Name"
-            name="fullName"
-            type="text"
-            required
-            placeholder="Enter your full name"
-            register={register}
-            error={errors.fullName?.message}
-            isPending={isPending}
-          />
+        <InputField
+          label="Email"
+          name="email"
+          type="email"
+          required
+          placeholder="name@email.com"
+          register={register}
+          error={errors.email?.message}
+          isPending={isPending}
+        />
 
-          <InputField
-            label="Email"
-            name="email"
-            type="email"
-            required
-            placeholder="name@email.com"
-            register={register}
-            error={errors.email?.message}
-            isPending={isPending}
-          />
+        <InputField
+          label="Password"
+          name="password"
+          type={showPassword ? "text" : "password"}
+          required
+          placeholder="Create a password"
+          register={register}
+          error={errors.password?.message}
+          isPending={isPending}
+          customInput={
+            <span
+              onClick={() => !isPending && setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer text-xl"
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          }
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          Between 8 and 72 characters
+        </p>
 
-          <InputField
-            label="Password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            required
-            placeholder="Create a password"
-            register={register}
-            error={errors.password?.message}
-            isPending={isPending}
-            customInput={
-              <span
-                onClick={() => !isPending && setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer text-xl"
-              >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
-              </span>
-            }
-          />
-          <p className="text-xs text-gray-500 mt-1">
-            Between 8 and 72 characters
-          </p>
-
-          {/* Always visible feedback section */}
-          <div className="mt-1">
-            {error && <FormError message={error} />}
-            {success && <FormSuccess message={success} />}
-          </div>
-
-          <button
-            type="submit"
-            disabled={isPending}
-            className={`w-full py-2 rounded-md transition text-white ${
-              isPending
-                ? "bg-indigo-400 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
-            }`}
-          >
-            {isPending ? "Processing..." : "Join for Free"}
-          </button>
-        </form>
-
-        <div className="flex items-center my-6">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <span className="px-3 text-gray-500 text-sm">or</span>
-          <div className="flex-grow h-px bg-gray-300"></div>
+        <div className="mt-1">
+          {error && <FormError message={error} />}
+          {success && <FormSuccess message={success} />}
         </div>
-        <Social />
+        <SubmitButton isLoading={isPending}>Join for Free</SubmitButton>
+      </form>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Already on FelegeHiwot?{" "}
-          <Link href="/auth/login" className="text-indigo-600 hover:underline">
-            Log in
-          </Link>
-        </p>
+      <DividerWithText text="or" />
+      <Social />
 
-        <p className="text-xs text-gray-500 text-center mt-4">
-          I accept FelegeHiwot&apos;s{" "}
-          <a href="#" className="underline">
-            Terms of Use
-          </a>{" "}
-          and{" "}
-          <a href="#" className="underline">
-            Privacy Notice
-          </a>
-          .
-        </p>
-      </div>
-    </div>
+      <p className="text-center text-sm text-gray-600 mt-6">
+        Already on FelegeHiwot?{" "}
+        <Link href="/login" className="text-indigo-600 hover:underline">
+          Log in
+        </Link>
+      </p>
+
+      <p className="text-xs text-gray-500 text-center mt-4">
+        I accept FelegeHiwot&apos;s{" "}
+        <a href="#" className="underline">
+          Terms of Use
+        </a>{" "}
+        and{" "}
+        <a href="#" className="underline">
+          Privacy Notice
+        </a>
+        .
+      </p>
+    </FormWrapper>
   );
 };
 

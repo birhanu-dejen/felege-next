@@ -1,26 +1,37 @@
 "use server";
+
 import z from "zod";
 import { ResetSchema } from "@/lib/schemas";
 import { getUserByEmail } from "@/data/user";
 import { sendPasswordResetEmail } from "@/lib/mail";
 import { generatePasswordResetToken } from "@/lib/tokens";
 
-type ResetFormValues = z.infer<typeof ResetSchema>;
-
-export const reset = async (values: ResetFormValues) => {
+export const reset = async (values: z.infer<typeof ResetSchema>) => {
   const validatedFields = ResetSchema.safeParse(values);
-  if (!validatedFields) {
-    return { error: "invalid email" };
+
+  if (!validatedFields.success) {
+    return { error: "Invalid email format." };
   }
+
   const { email } = validatedFields.data;
-  const existingUser = await getUserByEmail(email);
-  if (!existingUser) {
-    return { error: "email not found" };
+
+  try {
+    const existingUser = await getUserByEmail(email);
+
+    if (existingUser) {
+      const passwordResetToken = await generatePasswordResetToken(email);
+      await sendPasswordResetEmail(
+        passwordResetToken.email,
+        passwordResetToken.token
+      );
+    }
+
+    return {
+      success:
+        "If this email exists in our system, you'll receive a reset link shortly.",
+    };
+  } catch (error) {
+    console.error("Password reset failed:", error);
+    return { error: "Something went wrong. Please try again later." };
   }
-  const passwordResetToken = await generatePasswordResetToken(email);
-  await sendPasswordResetEmail(
-    passwordResetToken.email,
-    passwordResetToken.token
-  );
-  return { success: "reset email sent" };
 };

@@ -1,9 +1,10 @@
 "use server";
-
 import { NewPasswordSchema } from "@/lib/schemas";
-import { db } from "@/lib/db"; // your Prisma client
+import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { getPasswordResetTokenByToken } from "@/data/reset-token";
+import { getUserByEmail } from "@/data/user";
 
 type NewPasswordFormValues = z.infer<typeof NewPasswordSchema>;
 
@@ -11,41 +12,53 @@ export const newPassword = async (
   values: NewPasswordFormValues,
   token: string | null
 ) => {
-  // 1. Check for missing token
   if (!token) {
-    return { error: "Token is missing." };
+    console.error("Reset token is missing");
+    return { error: "Reset token is missing." };
   }
 
-  // 2. Validate password input
   const validatedFields = NewPasswordSchema.safeParse(values);
   if (!validatedFields.success) {
-    return { error: "Invalid password." };
+    console.error("Invalid input:", validatedFields.error);
+    return { error: "Invalid input. Please check your password requirements." };
   }
 
   const { password } = validatedFields.data;
 
   try {
-    // 3. Check if token is valid and not expired
-    const existingUser = await getUserByPasswordResetToken(token);
-    if (!existingUser) {
-      return { error: "Invalid or expired reset token." };
+    const existingToken = await getPasswordResetTokenByToken(token);
+
+    if (!existingToken) {
+      console.error("Invalid or expired token");
+      return { error: "This reset token is invalid or has already been used." };
     }
 
-    // 4. Hash the new password
+    const hasExpired = new Date(existingToken.expires) < new Date();
+    if (hasExpired) {
+      console.error("Token has expired");
+      return { error: "This reset token has expired." };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+    if (!existingUser) {
+      console.error("No user found for this reset request");
+      return { error: "No user found for this reset request." };
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 5. Update user's password
     await db.user.update({
       where: { id: existingUser.id },
       data: { password: hashedPassword },
     });
 
-    // 6. Delete the reset token
-    await deletePasswordResetToken(token);
+    await db.passwordResetToken.delete({
+      where: { id: existingToken.id },
+    });
 
-    return { success: "Your password has been reset successfully!" };
+    return { success: "Your password has been reset successfully." };
   } catch (error) {
     console.error("Password reset error:", error);
-    return { error: "Something went wrong. Please try again." };
+    return { error: "Something went wrong. Please try again later." };
   }
 };

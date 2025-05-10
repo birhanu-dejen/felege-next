@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 declare global {
+  //  should not  removed this is eslint bypass
   // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }

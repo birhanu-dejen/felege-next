@@ -3,60 +3,58 @@
 import z from "zod";
 import { signIn } from "@/auth";
 import { LoginSchema } from "@/lib/schemas";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { AuthError } from "next-auth";
 import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
-
-export type LoginResponse = {
-  error?: string;
-  success?: string;
-};
+import { AuthError } from "next-auth";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid email or password" };
+    return { error: "Invalid email or password format" };
   }
 
   const { email, password } = validatedFields.data;
-  const existingUser = await getUserByEmail(email);
 
-  // Check if user exists
-  if (!existingUser || !existingUser.password || !existingUser.email) {
+  const existingUser = await getUserByEmail(email);
+  if (!existingUser) {
     return { error: "Email does not exist" };
   }
 
-  // If the user email is not verified, handle that case
+  if (!existingUser.password || !existingUser.email) {
+    return { error: "User account is invalid" };
+  }
+
   if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(
       existingUser.email
     );
-
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token
     );
-    return { success: "Confirmation email sent " };
+    return { success: "Confirmation email sent" };
   }
 
   try {
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirect: false,
     });
+
+    if (result?.error) {
+      return { error: "Invalid credentials" };
+    }
+
+    return { success: true }; // Let client redirect after this
   } catch (error) {
     if (error instanceof AuthError) {
-      switch (error.name) {
-        case "CredentialsSignin":
-          return { error: "Invalid Credentials" };
-        default:
-          return { error: "Something went wrong" };
-      }
+      return { error: "Invalid credentials" };
     }
-    throw error;
+
+    console.error("Unexpected error during login:", error);
+    return { error: "An unexpected error occurred. Please try again later." };
   }
 };

@@ -1,25 +1,24 @@
 import Image from "next/image";
+import { heroButton } from "@/lib/constants/buttonstyles";
 
 const Hero = () => {
   return (
     <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
         <div className="lg:w-1/2 space-y-6">
-          <h2 className="text-4xl md:text-5xl font-semibold text-gray-800 leading-tight">
+          <h2 className="text-5xl font-normal text-gray-800 tracking-tight">
             Access Timeless Orthodox Teachings with Ours
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 leading-relaxed">
             Deepen your understanding of the Orthodox faith. Learn anytime,
             anywhere—guided by scripture, tradition, and trusted spiritual
             educators.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-indigo-600 text-white px-8 py-4 text-lg rounded-md hover:bg-indigo-700 transition cursor-pointer">
+            <button className={heroButton.primary}>
               Start Free Spiritual Journey
             </button>
-            <button className="text-indigo-600 bg-gray-50 px-8 py-4 text-lg border border-indigo-200 rounded-md hover:bg-indigo-100 transition cursor-pointer">
-              Explore Lessons
-            </button>
+            <button className={heroButton.secondary}>Explore Lessons</button>
           </div>
 
           <div className="flex items-center space-x-4 pt-6">

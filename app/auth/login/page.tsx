@@ -1,32 +1,40 @@
 "use client";
-import { login } from "@/actions/login";
+
+"use client";
+import { useRouter } from "next/navigation";
+
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import Social from "@/components/auth/social";
 
+import { login } from "@/actions/login";
 import { LoginSchema } from "@/lib/schemas";
-import InputField from "@/components/auth/Inputfield";
 
+import InputField from "@/components/auth/Inputfield";
 import { FormError } from "@/components/auth/formerror";
 import { FormSuccess } from "@/components/auth/formsuccess";
-import { useSearchParams } from "next/navigation";
+import Social from "@/components/auth/social";
+import FormWrapper from "@/components/ui/formwrapper";
+import { SubmitButton } from "@/components/ui/submitbutton";
+import DividerWithText from "@/components/ui/divider";
 
 type LoginFormValues = z.infer<typeof LoginSchema>;
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
+  const [isPending, startTransition] = useTransition();
+
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
       : "";
-  const [isPending, startTransition] = useTransition();
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
 
   const {
     register,
@@ -39,118 +47,87 @@ export default function LoginPage() {
       password: "",
     },
   });
-
+  const router = useRouter();
   const onSubmit = (values: LoginFormValues) => {
     setError("");
     setSuccess("");
     startTransition(() => {
       login(values).then((data) => {
         setError(data?.error);
-        setSuccess(data?.success);
+        setSuccess(
+          typeof data?.success === "string" ? data.success : undefined
+        );
+        if (data?.success === true) {
+          router.push("/dashboard");
+        }
       });
     });
   };
 
   return (
-    <div className="flex justify-center bg-white px-4 py-6 md:py-2">
-      <div className="w-full max-w-md bg-white p-6 sm:p-8">
-        <h2 className="text-2xl font-semibold text-center mb-6">
-          Welcome back
-        </h2>
+    <FormWrapper title="Welcome back">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <InputField
+          label="Email"
+          name="email"
+          type="email"
+          required
+          placeholder="name@email.com"
+          register={register}
+          error={errors.email?.message}
+          isPending={isPending}
+        />
 
-        <form
-          className="space-y-5"
-          onSubmit={handleSubmit(onSubmit)}
-          autoComplete="off"
-        >
-          <InputField
-            label="Email"
-            name="email"
-            type="email"
-            required
-            placeholder="name@email.com"
-            register={register}
-            error={errors.email?.message}
-            isPending={isPending}
-          />
-
-          <div>
-            <InputField
-              label="Password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              required
-              placeholder="Enter your password"
-              register={register}
-              error={errors.password?.message}
-              isPending={isPending}
-              customInput={
-                <span
-                  onClick={() => !isPending && setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer text-xl"
-                  aria-label="Toggle password visibility"
-                >
-                  {showPassword ? <FiEyeOff /> : <FiEye />}
-                </span>
-              }
-            />
-            <Link
-              href="/auth/forgot-password"
-              className={`text-sm text-indigo-600 hover:underline mt-1 inline-block ${
-                isPending ? "pointer-events-none opacity-70" : ""
-              }`}
+        <InputField
+          label="Password"
+          name="password"
+          type={showPassword ? "text" : "password"}
+          required
+          placeholder="Enter your password"
+          register={register}
+          error={errors.password?.message}
+          isPending={isPending}
+          customInput={
+            <span
+              onClick={() => !isPending && setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-3 flex items-center text-muted-foreground cursor-pointer text-xl"
+              aria-label="Toggle password visibility"
             >
-              Forgot password?
-            </Link>
-          </div>
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          }
+        />
 
-          {error && (
-            <div className="mt-1">
-              <FormError message={error || urlError} />
-            </div>
-          )}
+        <Link
+          href="/reset"
+          className={`text-sm text-indigo-600 hover:underline mt-1 inline-block ${
+            isPending ? "pointer-events-none opacity-70" : ""
+          }`}
+        >
+          Forgot password?
+        </Link>
 
-          {success && (
-            <div className="mt-1">
-              <FormSuccess message={success} />
-            </div>
-          )}
+        {error && <FormError message={error || urlError} />}
+        {success && <FormSuccess message={success} />}
 
-          <button
-            type="submit"
-            disabled={isPending}
-            className={`w-full py-2 rounded-md transition text-white ${
-              isPending
-                ? "bg-indigo-400 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
-            }`}
-          >
-            {isPending ? "Processing..." : "Login"}
-          </button>
-        </form>
+        <SubmitButton isLoading={isPending}>Login</SubmitButton>
+      </form>
 
-        <div className="flex items-center my-6">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <span className="px-3 text-gray-500 text-sm">or</span>
-          <div className="flex-grow h-px bg-gray-300"></div>
-        </div>
+      <DividerWithText text="or" />
 
-        <div className="space-y-3">
-          <Social />
-        </div>
+      <Social />
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          New to FelegeHiwot?{" "}
-          <Link
-            href="/signup"
-            className={`text-indigo-600 hover:underline ${
-              isPending ? "pointer-events-none opacity-70" : ""
-            }`}
-          >
-            Sign up
-          </Link>
-        </p>
-      </div>
-    </div>
+      <p className="text-center text-sm text-muted-foreground mt-6">
+        New to FelegeHiwot?{" "}
+        <Link
+          href="/signup"
+          className={`text-indigo-600 hover:underline ${
+            isPending ? "pointer-events-none opacity-70" : ""
+          }`}
+        >
+          Sign up
+        </Link>
+      </p>
+    </FormWrapper>
   );
 }
