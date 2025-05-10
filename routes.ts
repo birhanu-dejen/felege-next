@@ -15,6 +15,6 @@ export const authRoutes: string[] = [
   "/new-password",
 ];
 
-export const apiAuthPrefix: string = "/api/auth";
+export const apiAuthPrefix: string = "/api";
 
 export const DEFAULT_LOGIN_REDIRECT: string = "/dashboard";

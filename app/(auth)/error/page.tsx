@@ -8,7 +8,7 @@ export default function AuthErrorPage() {
   return (
     <main
       role="alert"
-      className="min-h-screen flex items-center justify-center bg-gray-50 px-4"
+      className="min-h-screen flex items-center justify-center bg-white px-4"
     >
       <section className="w-full max-w-md text-center bg-white p-8 rounded-xl shadow-sm border border-gray-200">
         <h1 className="text-2xl font-semibold text-red-600 mb-2">

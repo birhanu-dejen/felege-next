@@ -31,7 +31,7 @@ const SignUpPage = () => {
     defaultValues: {
       email: "",
       password: "",
-      fullName: "",
+      name: "",
     },
   });
 
@@ -50,13 +50,13 @@ const SignUpPage = () => {
     <FormWrapper title="Create your account">
       <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
         <InputField
-          label="Full Name"
-          name="fullName"
+          label="Name"
+          name="name"
           type="text"
           required
-          placeholder="Enter your full name"
+          placeholder="Enter your name"
           register={register}
-          error={errors.fullName?.message}
+          error={errors.name?.message}
           isPending={isPending}
         />
 

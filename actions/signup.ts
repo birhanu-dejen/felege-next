@@ -15,7 +15,7 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
     return { error: "Invalid email or password" };
   }
 
-  const { email, password, fullName } = validatedFields.data;
+  const { email, password, name } = validatedFields.data;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -27,7 +27,7 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
 
     await db.user.create({
       data: {
-        fullName,
+        name,
         email,
         password: hashedPassword,
       },
@@ -35,12 +35,10 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
 
     const verificationToken = await generateVerificationToken(email);
 
-    const firstName = fullName?.split(" ")[0] || "User";
-
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token,
-      firstName
+      name
     );
 
     return { success: "Confirmation email sent" };

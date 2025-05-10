@@ -25,16 +25,16 @@ import DividerWithText from "@/components/ui/divider";
 type LoginFormValues = z.infer<typeof LoginSchema>;
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-  const [isPending, startTransition] = useTransition();
-
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email already in use with different provider!"
-      : "";
+      ? "Email already registered with a different sign-in method. Use your password to log in or delete your account to switch to Google."
+      : undefined;
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | undefined>(urlError);
+  const [success, setSuccess] = useState<string | undefined>();
+  const [isPending, startTransition] = useTransition();
 
   const {
     register,

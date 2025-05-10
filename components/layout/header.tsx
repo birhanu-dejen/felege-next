@@ -102,7 +102,7 @@ export const Navbar = () => {
             <div className="flex flex-col gap-4 px-4">
               {isLoginPage ? (
                 <Link
-                  href="/auth/signup"
+                  href="/signup"
                   onClick={closeMobileMenu}
                   className={buttonStyles.desktop.signup}
                 >
@@ -110,7 +110,7 @@ export const Navbar = () => {
                 </Link>
               ) : isSignupPage ? (
                 <Link
-                  href="/auth/login"
+                  href="/login"
                   onClick={closeMobileMenu}
                   className={buttonStyles.desktop.login}
                 >
@@ -119,14 +119,14 @@ export const Navbar = () => {
               ) : (
                 <>
                   <Link
-                    href="/auth/signup"
+                    href="/signup"
                     onClick={closeMobileMenu}
                     className={buttonStyles.desktop.signup}
                   >
                     Sign Up
                   </Link>
                   <Link
-                    href="/auth/login"
+                    href="/login"
                     onClick={closeMobileMenu}
                     className={buttonStyles.desktop.login}
                   >
