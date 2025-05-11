@@ -5,7 +5,7 @@ import { footerLinks } from "@/lib/constants";
 
 export default function NewFooter() {
   return (
-    <footer className="bg-[#0B0F1A] text-gray-400 py-12 text-sm">
+    <footer className="bg-[#0B0F1A] text-gray-400 py-12  md:py-20 text-sm">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
           <h2 className="text-white font-semibold text-lg">
@@ -55,13 +55,13 @@ export default function NewFooter() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-500 px-4">
           <div className="flex gap-4">
             <a href="#" aria-label="Facebook" className="hover:text-white">
-              <FaFacebook size={22} />
+              <FaFacebook size={30} />
             </a>
             <a href="#" aria-label="Telegram" className="hover:text-white">
-              <FaTelegram size={22} />
+              <FaTelegram size={30} />
             </a>
             <a href="#" aria-label="YouTube" className="hover:text-white">
-              <FaYoutube size={22} />
+              <FaYoutube size={30} />
             </a>
           </div>
 

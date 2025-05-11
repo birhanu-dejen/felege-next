@@ -11,9 +11,9 @@ import Social from "@/components/auth/social";
 import { FormError } from "@/components/auth/formerror";
 import { FormSuccess } from "@/components/auth/formsuccess";
 import { signup } from "@/actions/signup";
-import DividerWithText from "@/components/ui/divider";
-import { SubmitButton } from "@/components/ui/submitbutton";
-import FormWrapper from "@/components/ui/formwrapper";
+import DividerWithText from "@/components/auth/divider";
+import { SubmitButton } from "@/components/auth/formbutton";
+import FormWrapper from "@/components/auth/formwrapper";
 type SignupFormValues = z.infer<typeof SignupSchema>;
 
 const SignUpPage = () => {

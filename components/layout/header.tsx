@@ -41,7 +41,7 @@ export const Navbar = () => {
             <CourseSearchBar />
           </div>
 
-          <div className="flex gap-4 ml-auto lg:mr-16">
+          <div className="flex gap-4 ml-auto md:mr-16">
             {isLoginPage ? (
               <Link href="/signup" className={buttonStyles.desktop.signup}>
                 Sign Up
@@ -76,7 +76,7 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-white z-40 overflow-y-auto">
+        <div className="md:hidden fixed top-[58px] left-0 w-full h-[calc(100vh-58px)] bg-white z-40 overflow-y-auto">
           <div className="container py-6 space-y-6">
             <div className="px-4">
               <CourseSearchBar />

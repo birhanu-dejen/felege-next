@@ -3,10 +3,10 @@ import { Quote } from "lucide-react";
 import Image from "next/image";
 const Testimonials = () => {
   return (
-    <section className="py-20 bg-white text-gray-800">
+    <section className="py-12 bg-white text-gray-800">
       <div className="max-w-6xl mx-auto px-6 text-center">
         <div className="text-center mb-20">
-          <h2 className="text-3xl font-normal text-gray-800 tracking-tight text-center mb-12">
+          <h2 className="text-3xl font-normal text-gray-800 tracking-tight text-center mb-4 md:mb-8">
             Hear from Our Learners
           </h2>
         </div>

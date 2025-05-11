@@ -10,8 +10,8 @@ import { FormError } from "@/components/auth/formerror";
 import { FormSuccess } from "@/components/auth/formsuccess";
 import { reset } from "@/actions/reset";
 
-import FormWrapper from "@/components/ui/formwrapper";
-import { SubmitButton } from "@/components/ui/submitbutton";
+import FormWrapper from "@/components/auth/formwrapper";
+import { SubmitButton } from "@/components/auth/formbutton";
 
 type ResetFormValues = z.infer<typeof ResetSchema>;
 

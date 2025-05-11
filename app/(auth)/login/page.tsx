@@ -19,9 +19,9 @@ import InputField from "@/components/auth/Inputfield";
 import { FormError } from "@/components/auth/formerror";
 import { FormSuccess } from "@/components/auth/formsuccess";
 import Social from "@/components/auth/social";
-import FormWrapper from "@/components/ui/formwrapper";
-import { SubmitButton } from "@/components/ui/submitbutton";
-import DividerWithText from "@/components/ui/divider";
+import FormWrapper from "@/components/auth/formwrapper";
+import { SubmitButton } from "@/components/auth/formbutton";
+import DividerWithText from "@/components/auth/divider";
 
 type LoginFormValues = z.infer<typeof LoginSchema>;
 

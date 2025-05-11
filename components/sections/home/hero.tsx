@@ -3,10 +3,10 @@ import { heroButton } from "@/lib/constants/buttonstyles";
 
 const Hero = () => {
   return (
-    <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <section className="bg-white py-12 px-4">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
         <div className="lg:w-1/2 space-y-6">
-          <h2 className="text-5xl font-normal text-gray-800 tracking-tight">
+          <h2 className="text-3xl  lg:text-5xl font-normal text-gray-800 tracking-tight">
             Access Timeless Orthodox Teachings with Ours
           </h2>
           <p className="text-lg text-gray-600 leading-relaxed">
@@ -21,7 +21,8 @@ const Hero = () => {
             <button className={heroButton.secondary}>Explore Lessons</button>
           </div>
 
-          <div className="flex items-center space-x-4 pt-6">
+          {/* Updated: Avatars and text stay side-by-side even on mobile */}
+          <div className="flex items-center gap-4 pt-6 flex-wrap">
             <div className="flex -space-x-3">
               {[1, 2, 3, 4].map((item) => (
                 <Image
@@ -34,9 +35,9 @@ const Hero = () => {
                 />
               ))}
             </div>
-            <p className="text-sm text-gray-500">
-              Join <span className="font-semibold">10,000+</span> faithful
-              learners growing in spirit today.
+            <p className="text-sm text-gray-500 font-medium">
+              Join <span className="font-semibold">10,000+</span> learners
+              growing in spirit today.
             </p>
           </div>
         </div>
